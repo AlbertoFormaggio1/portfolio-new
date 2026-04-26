@@ -33,10 +33,12 @@ export default function Page() {
               />
             </div>
             <BlurFade delay={BLUR_FADE_DELAY} className="order-1 md:order-2">
-              <Avatar className="size-24 md:size-32 border rounded-full shadow-lg ring-4 ring-muted">
-                <AvatarImage alt={DATA.name} src={DATA.avatarUrl} />
-                <AvatarFallback>{DATA.initials}</AvatarFallback>
-              </Avatar>
+              <div
+                className="size-24 md:size-32 rounded-full border shadow-lg ring-4 ring-muted"
+                style={{ backgroundImage: `url(${DATA.avatarUrl})`, backgroundSize: '150%', backgroundPosition: '50% 20%' }}
+                role="img"
+                aria-label={DATA.name}
+              />
             </BlurFade>
           </div>
         </div>
@@ -113,6 +115,61 @@ export default function Page() {
           </div>
         </div>
       </section>
+      {DATA.volunteering.length > 0 && (
+      <section id="volunteering">
+        <div className="flex min-h-0 flex-col gap-y-6">
+          <BlurFade delay={BLUR_FADE_DELAY * 8.5}>
+            <h2 className="text-xl font-bold">Volunteering</h2>
+          </BlurFade>
+          <div className="flex flex-col gap-8">
+            {DATA.volunteering.map((vol, index) => (
+              <BlurFade
+                key={vol.organization + vol.role}
+                delay={BLUR_FADE_DELAY * 8.6 + index * 0.05}
+              >
+                <Link
+                  href={vol.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-x-3 justify-between group"
+                >
+                  <div className="flex items-center gap-x-3 flex-1 min-w-0">
+                    {vol.logoUrl ? (
+                      <img
+                        src={vol.logoUrl}
+                        alt={vol.organization}
+                        className="size-8 md:size-10 p-1 border rounded-full shadow ring-2 ring-border overflow-hidden object-contain flex-none"
+                      />
+                    ) : (
+                      <div className="size-8 md:size-10 p-1 border rounded-full shadow ring-2 ring-border bg-muted flex-none" />
+                    )}
+                    <div className="flex-1 min-w-0 flex flex-col gap-0.5">
+                      <div className="font-semibold leading-none flex items-center gap-2">
+                        {vol.organization}
+                        <ArrowUpRight className="h-3.5 w-3.5 text-muted-foreground opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200" aria-hidden />
+                      </div>
+                      <div className="font-sans text-sm text-muted-foreground">
+                        {vol.role}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-1 text-xs tabular-nums text-muted-foreground text-right flex-none">
+                    <span>
+                      {vol.start} - {vol.end}
+                    </span>
+                  </div>
+                </Link>
+                {vol.description && (
+                  <div className="ml-13 mt-2 text-xs sm:text-sm text-muted-foreground">
+                    {vol.description}
+                  </div>
+                )}
+              </BlurFade>
+            ))}
+          </div>
+        </div>
+      </section>
+      )}
       <section id="skills">
         <div className="flex min-h-0 flex-col gap-y-4">
           <BlurFade delay={BLUR_FADE_DELAY * 9}>
@@ -122,7 +179,6 @@ export default function Page() {
             {DATA.skills.map((skill, id) => (
               <BlurFade key={skill.name} delay={BLUR_FADE_DELAY * 10 + id * 0.05}>
                 <div className="border bg-background border-border ring-2 ring-border/20 rounded-xl h-8 w-fit px-4 flex items-center gap-2">
-                  {skill.icon && <skill.icon className="size-4 rounded overflow-hidden object-contain" />}
                   <span className="text-foreground text-sm font-medium">{skill.name}</span>
                 </div>
               </BlurFade>
@@ -130,16 +186,20 @@ export default function Page() {
           </div>
         </div>
       </section>
+      {DATA.projects.length > 0 && (
       <section id="projects">
         <BlurFade delay={BLUR_FADE_DELAY * 11}>
           <ProjectsSection />
         </BlurFade>
       </section>
+      )}
+      {DATA.hackathons.length > 0 && (
       <section id="hackathons">
         <BlurFade delay={BLUR_FADE_DELAY * 13}>
           <HackathonsSection />
         </BlurFade>
       </section>
+      )}
       <section id="contact">
         <BlurFade delay={BLUR_FADE_DELAY * 16}>
           <ContactSection />
